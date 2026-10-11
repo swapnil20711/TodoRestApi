@@ -66,6 +66,17 @@ func DeleteTask(id string) error {
 	return nil
 }
 
+func UpdateTask(name string, status string, id string) (Task, error) {
+	var newTask = Task{Name: name, Status: status}
+
+	result := DB.Where("ID = ?", id).Updates(&Task{Name: newTask.Name, Status: newTask.Status})
+
+	if result.Error != nil {
+		return newTask, result.Error
+	}
+	return newTask, nil
+}
+
 func InitDB() error {
 	var err error
 	errGoDotEnv := godotenv.Load()
