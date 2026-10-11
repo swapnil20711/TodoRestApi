@@ -56,6 +56,16 @@ func GetById(id string) (Task, error) {
 	return task, nil
 }
 
+func DeleteTask(id string) error {
+	var task Task
+	result := DB.Where("ID = ?", id).Delete(&task)
+
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func InitDB() error {
 	var err error
 	errGoDotEnv := godotenv.Load()

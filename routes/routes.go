@@ -87,7 +87,29 @@ func AddTask(c *fiber.Ctx) error {
 }
 
 func DeleteTask(c *fiber.Ctx) error {
-	return c.SendString("Deleted a Task")
+	id := c.Params("id")
+
+	if id == "" {
+		return c.Status(500).JSON(&fiber.Map{
+			"message": "id cannot be empty",
+		})
+	}
+
+	err := database.DeleteTask(id)
+
+	if err != nil {
+		return c.Status(500).JSON(&fiber.Map{
+			"data":    nil,
+			"sucess":  false,
+			"message": err,
+		})
+	}
+
+	return c.Status(200).JSON(&fiber.Map{
+		"data":    nil,
+		"sucess":  true,
+		"message": "Task Deleted Successfully",
+	})
 }
 
 func UpdateTask(c *fiber.Ctx) error {
